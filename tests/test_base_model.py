@@ -96,7 +96,7 @@ class TestBaseModel(unittest.TestCase):
         """
         my_dict = self.obj.to_dict()
         new_obj = BaseModel(**my_dict)
-        self.assertEqual(my_dict, new_obj.to_dict())
+        self.assertEqual(self.obj.to_dict(), new_obj.to_dict())
         self.assertIsInstance(new_obj, BaseModel)
         self.assertIsInstance(new_obj.created_at, datetime)
 

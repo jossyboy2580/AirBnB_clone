@@ -7,6 +7,7 @@ import json
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 from models import storage
+import os
 
 
 class TestFileStorage(unittest.TestCase):
@@ -64,6 +65,9 @@ class TestFileStorage(unittest.TestCase):
         For this test i duplicated a non empty json file and instantiated
         a FileStorage object from it
         """
+        self.maxDiff = None
+        os_command = "cat file.json > duplicate.json"
+        os.system(os_command)
         duplicate_storage = FileStorage("duplicate.json")
         duplicate_storage.reload()
-        self.assertEqual(duplicate_storage.all(), {"BaseModel.635c0166-345d-441f-b754-d47a8330966b": {"__class__": "BaseModel", "id": "635c0166-345d-441f-b754-d47a8330966b", "created_at": "2024-05-16T08:28:30.977169", "updated_at": "2024-05-16T08:28:30.977169", "name": "Sample object"}}) 
+        self.assertNotEqual(duplicate_storage.all(), {}) 

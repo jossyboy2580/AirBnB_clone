@@ -33,9 +33,8 @@ class FileStorage:
         """
         Save the contents of __objects to filepath
         """
-        objects_as_json = json.dumps(self.__objects)
         with open(self.__file_path, 'w', encoding="utf-8") as fp:
-            fp.write(objects_as_json)
+            json.dump(self.__objects, fp)
 
     def reload(self):
         """
@@ -43,7 +42,6 @@ class FileStorage:
         """
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as fp:
-                file_content = fp.read()
-                self.__objects = json.loads(file_content)
+                self.__objects = json.load(fp)
         except FileNotFoundError:
             return

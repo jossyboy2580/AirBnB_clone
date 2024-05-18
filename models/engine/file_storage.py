@@ -16,6 +16,13 @@ class FileStorage:
         self.__file_path = file_path
         self.__objects = dict()
 
+    @property
+    def file_path(self):
+        """
+        returns the file path of the storage
+        """
+        return (self.__file_path)
+
     def all(self):
         """
         Returns the dictionary self.__objects

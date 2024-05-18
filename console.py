@@ -4,6 +4,7 @@
 This module contains the entry point of the command
 intepreter
 """
+import json
 import cmd
 from models.base_model import BaseModel
 from models import storage
@@ -62,21 +63,21 @@ class HBNBCommand(cmd.Cmd):
         """
         if not line:
             print("** class name missing **")
-            pass
+            return
         obj = line.split()
         if not obj[0] in HBNBCommand.my_classes:
             print("** class doesn't exist **")
-            pass
+            return
         if len(obj) < 2:
             print("** instance id missing **")
-            pass
+            return
 
         my_storage_objects = storage.all()
         try:
             my_obj = my_storage_objects["{}.{}".format(obj[0], obj[1])]
         except KeyError:
             print("** no instance found **")
-            pass
+            return
         else:
             # my_obj_model = BaseModel(my_obj)
             print(my_obj)
@@ -87,30 +88,74 @@ class HBNBCommand(cmd.Cmd):
         """
         if not line:
             print("** class name missing **")
-            pass
+            return
         obj = line.split()
         if not obj[0] in HBNBCommand.my_classes:
             print("** class doesn't exist **")
-            pass
+            return
         if len(obj) < 2:
             print("** instance id missing **")
-            pass
+            return
 
         my_storage_objects = storage.all()
         try:
-            my_obj = my_storage_objects["{}.{}".format(obj[0], obj[1])]
+            del my_storage_objects["{}.{}".format(obj[0], obj[1])]
         except KeyError:
             print("** no instance found **")
-            pass
+            return
         else:
-            # my_obj_model = BaseModel(my_obj)
-            print(my_obj)
+            with open(storage.file_path, 'w', encoding="utf-8") as fp:
+                json.dump(my_storage_objects, fp)
+
+    def do_all(self, line):
+        """
+        Show command to display all objects
+        """
+        if not line:
+            try:
+                with open(storage.file_path, 'r', encoding="utf-8") as fp:
+                    objs_dict = json.load(fp)
+                    for key in objs_dict:
+                        obj = objs_dict[key]
+                        obj_model = HBNBCommand.my_classes[obj["__class__"]](**obj)
+                        print(obj_model)
+            except FileNotFoundError:
+                return
+        elif line and line not in HBNBCommand.my_classes:
+            print("** class doesn't exist **")
+        else:
+            try:
+                with open(storage.file_path, 'r', encoding="utf-8") as fp:
+                    objs_dict = json.load(fp)
+                    for key, value in objs_dict.items():
+                        if value["__class__"] == line:
+                            obj_model = HBNBCommand.my_classes[value["__class__"]](**value)
+                            print(obj_model)
+            except FileNotFoundError:
+                return
+
     def help_show(self):
         """
         Help statement for the show command
         """
         print("This command prints an object by Classname and id")
         print("Usage: show <Model> <id>")
+
+    def help_destroy(self):
+        """
+        Help statement for the destroy command
+        """
+        print("This command destroys an object by Classname and id")
+        print("Usage: destroy <Model> <id>")
+
+    def help_all(self):
+        """
+        Helpt for the all command
+        """
+        print("This command displays objects from a storage")
+        print("Usage: all")
+        print("or")
+        print("Usage: all ModelName")
 
     def emptyline(self):
         """

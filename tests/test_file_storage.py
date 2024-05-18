@@ -71,3 +71,15 @@ class TestFileStorage(unittest.TestCase):
         duplicate_storage = FileStorage("duplicate.json")
         duplicate_storage.reload()
         self.assertNotEqual(duplicate_storage.all(), {}) 
+        os.system("rm duplicate.json")
+
+
+class TestFileStorageOnUser(unittest.TestCase):
+    """
+    Tests for how the filestorage object handles the user object
+    """
+
+    pass
+
+if __name__ == "__main__":
+    unittest.main()

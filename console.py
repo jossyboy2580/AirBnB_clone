@@ -7,6 +7,7 @@ intepreter
 import json
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
@@ -15,19 +16,13 @@ class HBNBCommand(cmd.Cmd):
     A command intepreter for the aurbnb console
     """
     quote = "(hbnb)"
-    my_classes = {"BaseModel": BaseModel}
+    my_classes = {"BaseModel": BaseModel, "User": User}
 
     def do_quit(self, line):
         """
         Quit command to exit the program
         """
         return (True)
-
-    def help_quit(self):
-        """
-        Quit command to exit the program
-        """
-        print("Quit command to exit the program")
 
     def do_EOF(self, line):
         """
@@ -39,11 +34,10 @@ class HBNBCommand(cmd.Cmd):
         """
         Create command to create an instance of an object
         """
-
         if not line:
             print("** class name missing **")
             pass
-        elif not line in HBNBCommand.my_classes:
+        elif line not in HBNBCommand.my_classes:
             print("** class doesn't exist **")
             pass
         else:
@@ -65,7 +59,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         obj = line.split()
-        if not obj[0] in HBNBCommand.my_classes:
+        if obj[0] not in HBNBCommand.my_classes:
             print("** class doesn't exist **")
             return
         if len(obj) < 2:
@@ -111,28 +105,70 @@ class HBNBCommand(cmd.Cmd):
         """
         Show command to display all objects
         """
+        all_objs = storage.all()
+        all_cls_dict = HBNBCommand.my_classes
         if not line:
-            try:
-                with open(storage.file_path, 'r', encoding="utf-8") as fp:
-                    objs_dict = json.load(fp)
-                    for key in objs_dict:
-                        obj = objs_dict[key]
-                        obj_model = HBNBCommand.my_classes[obj["__class__"]](**obj)
-                        print(obj_model)
-            except FileNotFoundError:
-                return
+            for key in all_objs:
+                obj_cls, obj_id = key.split(".")
+                obj = all_cls_dict[obj_cls](**all_objs[key])
+                print(obj)
         elif line and line not in HBNBCommand.my_classes:
             print("** class doesn't exist **")
         else:
-            try:
-                with open(storage.file_path, 'r', encoding="utf-8") as fp:
-                    objs_dict = json.load(fp)
-                    for key, value in objs_dict.items():
-                        if value["__class__"] == line:
-                            obj_model = HBNBCommand.my_classes[value["__class__"]](**value)
-                            print(obj_model)
-            except FileNotFoundError:
+            args = ".".join(line.split())
+            for key in all_objs:
+                if key == args:
+                    obj_cls, obj_id = key.split(".")
+                    obj = all_cls_dict[obj_cls](**all_objs[key])
+
+    def do_update(self, line):
+        """
+        Update command to update an attribute of our instance
+        """
+
+        cls_dict = HBNBCommand.my_classes
+        immutable_attrib = ["created_at", "id", "updated_at"]
+
+        if not line:
+            print("** class name missing **")
+            return
+        args = line.split()
+        if args[0] not in cls_dict:
+            print("** class doesn't exist **")
+            return
+        if len(args) < 2:
+            print("** instance id missing **")
+        storage_dict = storage.all()
+        try:
+            obj = storage_dict[args[0] + "." + args[1]]
+        except KeyError:
+            print("** no instance found **")
+            return
+        else:
+            if len(args) < 3:
+                print("** attribute name missing **")
                 return
+            if len(args) < 4:
+                print("** value missing **")
+                return
+            if args[2] in immutable_attrib:
+                return
+            else:
+                obj[args[2]] = args[3]
+
+    def emptyline(self):
+        """
+        What happens when a user executes an empty line
+        """
+        pass
+
+    # Help methods for all the commands
+
+    def help_quit(self):
+        """
+        Quit command to exit the program
+        """
+        print("Quit command to exit the program")
 
     def help_show(self):
         """
@@ -150,18 +186,19 @@ class HBNBCommand(cmd.Cmd):
 
     def help_all(self):
         """
-        Helpt for the all command
+        Help for the all command
         """
         print("This command displays objects from a storage")
         print("Usage: all")
         print("or")
         print("Usage: all ModelName")
 
-    def emptyline(self):
+    def help_update(self):
         """
-        Do nothing
+        Help for the update command
         """
-        pass
+        print("This command updates an attribute of an instance")
+        print("Usage: update <class_name> <id> <attribute> <value>")
 
 
 if __name__ == "__main__":

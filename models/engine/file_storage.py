@@ -4,6 +4,7 @@ A module defining our file storage object
 """
 import json
 
+
 class FileStorage:
     """
     Our file storage object class definition

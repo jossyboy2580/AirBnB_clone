@@ -62,6 +62,7 @@ class TestBaseModel(unittest.TestCase):
         print(self.obj)
         c_str = '[BaseModel] ({}) {}'.format(self.obj.id, self.obj.__dict__)
         self.assertEqual(captured_output.getvalue().strip(), c_str)
+        self.assertEqual(captured_output.getvalue().strip(), str(self.obj))
         sys.stdout = sys.__stdout__
 
     def test_base_model_save(self):
@@ -85,6 +86,7 @@ class TestBaseModel(unittest.TestCase):
         my_dict["updated_at"] = str(self.obj.updated_at.isoformat())
         my_dict["__class__"] = "BaseModel"
         self.assertEqual(my_dict, self.obj.to_dict())
+        self.assertIsInstance(self.obj.to_dict(), dict)
 
     def test_model_to_dict_types(self):
         """
@@ -110,3 +112,7 @@ class TestBaseModel(unittest.TestCase):
         """
         c_key = "{}.{}".format(self.obj.__class__.__name__, self.obj.id)
         self.assertIn(c_key, storage.all())
+
+
+if __name__ == "__main__":
+    unittest.main()

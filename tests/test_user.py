@@ -25,6 +25,16 @@ class TestUser(unittest.TestCase):
         class
         """
         self.assertIsInstance(self.usr, BaseModel)
+        self.assertTrue(issubclass(self.usr.__class__, BaseModel))
+
+    def test_public_attributes_types(self):
+        """
+        tests the types of the public user attributes
+        """
+        self.assertIsInstance(self.usr.email, str)
+        self.assertIsInstance(self.usr.password, str)
+        self.assertIsInstance(self.usr.first_name, str)
+        self.assertIsInstance(self.usr.last_name, str)
 
 
 if __name__ == "__main__":

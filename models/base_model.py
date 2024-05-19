@@ -16,7 +16,7 @@ class BaseModel:
         """
         Initialize an instance of our class
         """
-        if len(kwargs) > 0:
+        if kwargs > 0:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
                     value = datetime.fromisoformat(value)

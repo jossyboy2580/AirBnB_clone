@@ -42,7 +42,8 @@ class FileStorage:
         from models.user import User
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as fp:
-                loaded = json.load(fp)
+                content = fp.read()
+                loaded = json.loads(content)
                 for key, val in loaded.items():
                     instance = eval(val["__class__"])(**val)
                     self.__objects[key] = instance

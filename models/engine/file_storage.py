@@ -9,20 +9,8 @@ class FileStorage:
     """
     Our file storage object class definition
     """
-
-    def __init__(self, file_path):
-        """
-        Initialize a new file storage object
-        """
-        self.__file_path = file_path
-        self.__objects = dict()
-
-    @property
-    def file_path(self):
-        """
-        returns the file path of the storage
-        """
-        return (self.__file_path)
+    __file_path = "file.json"
+    __objects = dict()
 
     def all(self):
         """
@@ -34,8 +22,7 @@ class FileStorage:
         """
         Add a new object into the storage
         """
-        obj_dict = obj.to_dict()
-        self.__objects[obj_dict["__class__"] + "." + obj_dict["id"]] = obj_dict
+        self.__objects[obj.__class__.__name__ + "." + obj.id] = obj.to_dict()
 
     def save(self):
         """

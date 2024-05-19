@@ -119,7 +119,7 @@ class HBNBCommand(cmd.Cmd):
                 for key in all_objs:
                     obj_cls, obj_id = key.split(".")
                     if obj_cls == line:
-                        obj = cls_dict[obj_cls](**all_objs[key])
+                        obj = cls_dict[obj_cls](**all_objs[key].to_dict())
                         print(obj)
 
     def do_update(self, line):

@@ -50,10 +50,8 @@ class BaseModel:
         """
         A method that returns the dictionary form of our object
         """
-        my_dict = dict()
+        my_dict = dict(self.__dict__)
         my_dict["__class__"] = self.__class__.__name__
-        for key, value in self.__dict__.items():
-            if key == "created_at" or key == "updated_at":
-                value = value.isoformat()
-            my_dict[key] = value
+        my_dict["created_at"] = my_dict["created_at"].isoformat()
+        my_dict["updated_at"] = my_dict["updated_at"].isoformat()
         return (my_dict)

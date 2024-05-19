@@ -93,13 +93,11 @@ class HBNBCommand(cmd.Cmd):
 
         my_storage_objects = storage.all()
         try:
-            del my_storage_objects["{}.{}".format(obj[0], obj[1])]
+            key = obj[0] + "." + obj[1]
+            del my_storage_objects[key]
         except KeyError:
             print("** no instance found **")
             return
-        else:
-            with open(storage.file_path, 'w', encoding="utf-8") as fp:
-                json.dump(my_storage_objects, fp)
 
     def do_all(self, line):
         """
@@ -152,7 +150,7 @@ class HBNBCommand(cmd.Cmd):
             if args[2] in immutable_attrib:
                 return
             else:
-                obj[args[2]] = args[3]
+                setattr(obj, args[2], args[3])
 
     def emptyline(self):
         """

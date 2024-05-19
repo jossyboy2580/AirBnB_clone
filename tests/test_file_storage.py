@@ -41,7 +41,8 @@ class TestFileStorage(unittest.TestCase):
         new_storage = FileStorage("new.json")
         new_storage.new(my_obj)
         self.maxDiff = None
-        self.assertEqual(new_storage.all(), {"BaseModel.{}".format(my_obj.id): my_obj.to_dict()})
+        c_dct = {"BaseModel.{}".format(my_obj.id): my_obj.to_dict()}
+        self.assertEqual(new_storage.all(), c_dct)
 
     def test_save_method(self):
         """
@@ -70,7 +71,7 @@ class TestFileStorage(unittest.TestCase):
         os.system(os_command)
         duplicate_storage = FileStorage("duplicate.json")
         duplicate_storage.reload()
-        self.assertNotEqual(duplicate_storage.all(), {}) 
+        self.assertNotEqual(duplicate_storage.all(), {})
         os.system("rm duplicate.json")
 
 
@@ -78,8 +79,8 @@ class TestFileStorageOnUser(unittest.TestCase):
     """
     Tests for how the filestorage object handles the user object
     """
-
     pass
+
 
 if __name__ == "__main__":
     unittest.main()

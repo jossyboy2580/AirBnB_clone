@@ -7,6 +7,7 @@ from uuid import uuid4
 from datetime import datetime
 from models import storage
 
+
 class BaseModel:
     """
     Our base model class
@@ -33,7 +34,10 @@ class BaseModel:
         """
         Return a string version of the object
         """
-        return ("[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__))
+        mod_nm = self.__class__.__name__
+        mod_id = self.id
+        mod_dct = self.__dict__
+        return ("[{}] ({}) {}".format(mod_nm, mod_id, mod_dct))
 
     def save(self):
         """

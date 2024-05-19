@@ -2,7 +2,6 @@
 """
 Unittest test cases for our basemodel class
 """
-
 import unittest
 import uuid
 from datetime import datetime
@@ -11,15 +10,18 @@ from io import StringIO
 import sys
 from models import storage
 
+
 class TestBaseModel(unittest.TestCase):
     """
-    This TestBaseModel class inherits from TestCase and it runs tests on the features
+    This TestBaseModel class inherits from TestCase
+    and it runs tests on the features
     implemented on out base_model module
     """
 
     def setUp(self):
         """
-        A test fixture that sets up the necessary objects for out tests
+        A test fixture that sets up the necessary
+        objects for out tests
         """
         self.obj = BaseModel()
 
@@ -58,9 +60,9 @@ class TestBaseModel(unittest.TestCase):
         captured_output = StringIO()
         sys.stdout = captured_output
         print(self.obj)
-        self.assertMultiLineEqual(captured_output.getvalue().strip(), '[BaseModel] ({}) {}'.format(self.obj.id, self.obj.__dict__))
+        c_str = '[BaseModel] ({}) {}'.format(self.obj.id, self.obj.__dict__)
+        self.assertEqual(captured_output.getvalue().strip(), c_str)
         sys.stdout = sys.__stdout__
-
 
     def test_base_model_save(self):
         """
@@ -102,7 +104,9 @@ class TestBaseModel(unittest.TestCase):
 
     def test_setting_new_obj_in_storage(self):
         """
-        This test is to confirm if a new object is entered into the storage
+        This test is to confirm if a new object is entered
+        into the storage
         object
         """
-        self.assertIn("{}.{}".format(self.obj.__class__.__name__, self.obj.id), storage.all())
+        c_key = "{}.{}".format(self.obj.__class__.__name__, self.obj.id)
+        self.assertIn(c_key, storage.all())

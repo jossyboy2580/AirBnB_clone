@@ -15,7 +15,7 @@ class HBNBCommand(cmd.Cmd):
     """
     A command intepreter for the aurbnb console
     """
-    quote = "(hbnb)"
+    prompt = "(hbnb) "
     my_classes = {"BaseModel": BaseModel, "User": User}
 
     def do_quit(self, line):

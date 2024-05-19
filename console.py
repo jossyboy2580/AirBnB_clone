@@ -106,20 +106,21 @@ class HBNBCommand(cmd.Cmd):
         Show command to display all objects
         """
         all_objs = storage.all()
-        all_cls_dict = HBNBCommand.my_classes
+        cls_dict = HBNBCommand.my_classes
         if not line:
             for key in all_objs:
                 obj_cls, obj_id = key.split(".")
-                obj = all_cls_dict[obj_cls](**all_objs[key])
+                obj = cls_dict[obj_cls](**all_objs[key])
                 print(obj)
-        elif line and line not in HBNBCommand.my_classes:
-            print("** class doesn't exist **")
         else:
-            args = ".".join(line.split())
-            for key in all_objs:
-                if key == args:
+            if line not in HBNBCommand.my_classes:
+                print("** class doesn't exist **")
+            else:
+                for key in all_objs:
                     obj_cls, obj_id = key.split(".")
-                    obj = all_cls_dict[obj_cls](**all_objs[key])
+                    if obj_cls == line:
+                        obj = cls_dict[obj_cls](**all_objs[key])
+                        print(obj)
 
     def do_update(self, line):
         """

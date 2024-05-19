@@ -19,4 +19,4 @@ class User(BaseModel):
         """
         initialize the User object
         """
-        super().__init__(**kwargs)
+        super().__init__(kwargs)

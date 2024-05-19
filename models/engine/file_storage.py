@@ -22,21 +22,29 @@ class FileStorage:
         """
         Add a new object into the storage
         """
-        self.__objects[obj.__class__.__name__ + "." + obj.id] = obj.to_dict()
+        self.__objects[obj.__class__.__name__ + "." + obj.id] = obj
 
     def save(self):
         """
         Save the contents of __objects to filepath
         """
+        saved = dict()
+        for key, val in self.__objects.items():
+            saved[key] = val.to_dict()
         with open(self.__file_path, 'w', encoding="utf-8") as fp:
-            json.dump(self.__objects, fp)
+            json.dump(saved, fp)
 
     def reload(self):
         """
         Reload the content of the file in file_path
         """
+        from models.base_model import BaseModel
+        from models.user import User
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as fp:
-                self.__objects = json.load(fp)
+                loaded = json.load(fp)
+                for key, val in loaded.items():
+                    instance = eval(val["__class__"])(**val)
+                    self.__objects[key] = instance
         except FileNotFoundError:
             return

@@ -108,18 +108,15 @@ class HBNBCommand(cmd.Cmd):
         all_objs = storage.all()
         cls_dict = HBNBCommand.my_classes
         if not line:
-            for key in all_objs:
-                obj_cls, obj_id = key.split(".")
-                obj = cls_dict[obj_cls](**all_objs[key])
+            for key, obj in all_objs.items():
                 print(obj)
         else:
             if line not in HBNBCommand.my_classes:
                 print("** class doesn't exist **")
             else:
-                for key in all_objs:
+                for key, obj in all_objs.items():
                     obj_cls, obj_id = key.split(".")
                     if obj_cls == line:
-                        obj = cls_dict[obj_cls](**all_objs[key].to_dict())
                         print(obj)
 
     def do_update(self, line):

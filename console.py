@@ -116,6 +116,14 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             for key, obj in all_objs.items():
                 print(obj)
+        else:
+            if line in cls_dict:
+                for key, obj in al_objs.items():
+                    cls_nm = key.split(".")[0]
+                    if line == cls_nm:
+                        print(obj)
+            else:
+                print("** class doesn't exist **")
 
     def do_count(self, line):
         """

@@ -40,6 +40,10 @@ class FileStorage:
         """
         from models.base_model import BaseModel
         from models.user import User
+        from models.city import City
+        from models.place import Place
+        from models.amenity import Amenity
+        from models.review import Review
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as fp:
                 content = fp.read()

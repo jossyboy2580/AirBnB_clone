@@ -5,6 +5,7 @@ A series of unittests for our file storage class
 import unittest
 import json
 from models.base_model import BaseModel
+from models.user import User
 from models.engine.file_storage import FileStorage
 from models import storage
 import os

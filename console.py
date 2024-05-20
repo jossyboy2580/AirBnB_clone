@@ -8,6 +8,11 @@ import json
 import cmd
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.state import State
+from models.amenity import Amenity
+from models.review import Review
+from models.city import City
 from models import storage
 
 
@@ -16,7 +21,9 @@ class HBNBCommand(cmd.Cmd):
     A command intepreter for the aurbnb console
     """
     prompt = "(hbnb) "
-    my_classes = {"BaseModel": BaseModel, "User": User}
+    my_classes = {"BaseModel": BaseModel, "User": User,
+            "City": City, "Place": Place, "State": State,
+            "Amenity": Amenity, "Review": Review}
 
     def do_quit(self, line):
         """
@@ -108,14 +115,24 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             for key, obj in all_objs.items():
                 print(obj)
-        else:
+
+    def do_count(self, line):
+        """
+        count command to display count objects
+        of a certaim class
+        """
+        all_objs = storage.all()
+        cls_dict = HBNBCommand.my_classes
+        count = 0
+        if line:
             if line not in HBNBCommand.my_classes:
                 print("** class doesn't exist **")
             else:
                 for key, obj in all_objs.items():
                     obj_cls, obj_id = key.split(".")
                     if obj_cls == line:
-                        print(obj)
+                        count += 1
+            print(count)
 
     def do_update(self, line):
         """
@@ -157,6 +174,21 @@ class HBNBCommand(cmd.Cmd):
         What happens when a user executes an empty line
         """
         pass
+
+    def default(self, line):
+        """
+        Whay to do when the command entered is not among
+        the do commands
+        """
+        args = line.split(".")
+        if args[0] not in HBNBCommand.my_classes:
+            print("** invalid command **")
+            return
+        if len(args) > 1:
+            if args[1] == "all()":
+                self.do_all(args[0])
+            elif args[1] == "count()":
+                self.do_count(args[0])
 
     # Help methods for all the commands
 

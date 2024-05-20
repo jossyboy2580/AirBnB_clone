@@ -28,7 +28,6 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn(key, storage.all())
         self.assertEqual(storage.all()[key], an_obj)
 
-
     def test_save_method(self):
         """
         Tests the save method by checking the json of the object with

@@ -36,6 +36,13 @@ class TestFileStorage(unittest.TestCase):
         bm = None
         with self.assertRaises(TypeError):
             storage.save(bm)
+        bm2 = BaseModel()
+        bm2_key = "BaseModel.{}".format(bm2.id)
+        storage.save()
+        file_n = storage.__class__._FileStorage__file_path
+        with open(file_n, "r", encoding="utf-8") as fp:
+            content = json.load(fp)
+            self.assertIn(bm2_key, content.keys())
 
     def test_non_empty_storage_reload(self):
         """

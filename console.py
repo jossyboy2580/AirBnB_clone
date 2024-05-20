@@ -102,7 +102,8 @@ class HBNBCommand(cmd.Cmd):
         my_storage_objects = storage.all()
         try:
             key = obj[0] + "." + obj[1]
-            del my_storage_objects[key]
+            del storage.__class__._FileStorage__objects[key]
+            storage.save()
         except KeyError:
             print("** no instance found **")
             return

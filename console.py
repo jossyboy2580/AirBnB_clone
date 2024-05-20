@@ -118,7 +118,7 @@ class HBNBCommand(cmd.Cmd):
                 print(obj)
         else:
             if line in cls_dict:
-                for key, obj in al_objs.items():
+                for key, obj in all_objs.items():
                     cls_nm = key.split(".")[0]
                     if line == cls_nm:
                         print(obj)

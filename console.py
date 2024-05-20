@@ -189,6 +189,16 @@ class HBNBCommand(cmd.Cmd):
                 self.do_all(args[0])
             elif args[1] == "count()":
                 self.do_count(args[0])
+            elif args[1].startswith("show(") and args[1].endswith(")"):
+                arg_id = args[1][6:-2]
+                self.do_show(args[0] + " " + arg_id)
+            elif args[1].startswith("destroy(") and args[1].endswith(")"):
+                arg_id = args[1][9:-2]
+                self.do_destroy(args[0] + " " + arg_id)
+            elif args[1].startswith("update(") and args[1].endswith(")"):
+                arg_id = args[1][8:-2]
+                arg_id = " ".join(arg_id.split(", "))
+                self.do_update(args[0] + " " + arg_id)
 
     # Help methods for all the commands
 

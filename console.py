@@ -160,6 +160,7 @@ class HBNBCommand(cmd.Cmd):
             return
         if len(args) < 2:
             print("** instance id missing **")
+            return
         storage_dict = storage.all()
         try:
             obj = storage_dict[args[0] + "." + args[1]]

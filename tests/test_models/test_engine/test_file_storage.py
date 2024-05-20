@@ -49,6 +49,14 @@ class TestFileStorage(unittest.TestCase):
         For this test i duplicated a non empty json file and instantiated
         a FileStorage object from it
         """
+        bm2 = BaseModel()
+        bm2_key = "BaseModel.{}".format(bm2.id)
+        storage.save()
+        storage.reload()
+        file_n = storage.__class__._FileStorage__file_path
+        with open(file_n, "r", encoding="utf-8") as fp:
+            content = json.load(fp)
+            self.assertIn(bm2_key, content.keys())
 
     def test_attribs_not_none(self):
         """
@@ -57,19 +65,6 @@ class TestFileStorage(unittest.TestCase):
         new_storage = FileStorage()
         self.assertIsInstance(FileStorage._FileStorage__file_path, str)
         self.assertIsInstance(FileStorage._FileStorage__objects, dict)
-
-
-class TestFileStorageOnUser(unittest.TestCase):
-    """
-    Tests for how the filestorage object handles the user object
-    """
-
-    def test_user_in_storage(self):
-        """
-        Tests if a user is in storage
-        """
-        usr_1 = User()
-        usr_2 = User
 
 
 if __name__ == "__main__":

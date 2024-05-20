@@ -33,13 +33,23 @@ class TestFileStorage(unittest.TestCase):
         Tests the save method by checking the json of the object with
         the content of the file
         """
-        pass
+        bm = None
+        with self.assertRaises(TypeError):
+            storage.save(bm)
 
     def test_non_empty_storage_reload(self):
         """
         For this test i duplicated a non empty json file and instantiated
         a FileStorage object from it
         """
+
+    def test_attribs_not_none(self):
+        """
+        test that the attributes are not none
+        """
+        new_storage = FileStorage()
+        self.assertIsInstance(FileStorage._FileStorage__file_path, str)
+        self.assertIsInstance(FileStorage._FileStorage__objects, dict)
 
 
 class TestFileStorageOnUser(unittest.TestCase):

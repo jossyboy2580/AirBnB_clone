@@ -34,7 +34,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, line):
         """
-        Ctrl_D triggers a program exit
+        EOF (Ctrl+D) signal to exit the program.
         """
         return (True)
 
@@ -229,9 +229,15 @@ class HBNBCommand(cmd.Cmd):
 
     def help_quit(self):
         """
-        Quit command to exit the program
+        Quit command to exit the program.
         """
-        print("Quit command to exit the program")
+        print("Quit command to exit the program.")
+
+    def help_EOF(self):
+        """
+        Help for EOF
+        """
+        print("EOF (Ctrl+D) signal to exit the program.")
 
     def help_show(self):
         """

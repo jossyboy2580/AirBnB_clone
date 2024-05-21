@@ -207,9 +207,25 @@ class HBNBCommand(cmd.Cmd):
                 arg_id = args[1][9:-2]
                 self.do_destroy(args[0] + " " + arg_id)
             elif args[1].startswith("update(") and args[1].endswith(")"):
-                arg_id = args[1][8:-2]
-                arg_id = " ".join(arg_id.split(", "))
-                self.do_update(args[0] + " " + arg_id)
+                arg_details = args[1][7:-1]
+                arg_details = arg_details.split(", ")
+                if len(arg_details) == 3:
+                    _id = arg_details[0][1:-1]
+                    _name = arg_details[1][1:-1]
+                    _val = arg_details[2][1:-1]
+                    updt_args = "{} {} {} {}".format(args[0], _id, _name, _val)
+                    self.do_update(updt_args)
+                elif len(arg_details) == 2:
+                    if not isinstance(eval(arg_details[1]), dict):
+                        return
+                    else:
+                        dicto = eval(arg_details[1])
+                        for key, val in dicto.items():
+                            _id = arg_details[0][1:-1]
+                            _name = arg_details[1][1:-1]
+                            _val = arg_details[2][1:-1]
+                            updt_args = "f{args[0]} {_id} {_name} {_val}"
+                            self.do_update(updt_args)
 
     # Help methods for all the commands
 

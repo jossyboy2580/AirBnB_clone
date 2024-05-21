@@ -224,7 +224,7 @@ class HBNBCommand(cmd.Cmd):
                             _id = arg_details[0][1:-1]
                             _name = arg_details[1][1:-1]
                             _val = arg_details[2][1:-1]
-                            updt_args = "f{args[0]} {_id} {_name} {_val}"
+                            updt_args = f"{args[0]} {_id} {_name} {_val}"
                             self.do_update(updt_args)
 
     # Help methods for all the commands

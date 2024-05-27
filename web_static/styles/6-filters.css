@@ -62,11 +62,11 @@
   display: none;
   position: absolute;
   left: 0;
-  top: 90%;
+  top: 100%;
   width: 100%;
   background-color: #fafafa;
   border: 1px solid #dddddd;
-  padding: 8px;
+  padding: 16px;
 }
 
 .locations:hover .popover,
@@ -79,5 +79,5 @@
 }
 
 .popover ul {
-  margin-left: 8px;
+  margin-left: 16px;
 }

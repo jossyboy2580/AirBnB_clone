@@ -37,6 +37,13 @@
   position: relative;
 }
 
+@media screen and (max-width: 400px) {
+  .filters .locations,
+  .filters .amenities {
+    display: none;
+  }
+}
+
 .title {
   font-weight: 600;
 }

@@ -1,0 +1,128 @@
+.places .place_name,
+.section_title {
+  font-size: 30px;
+}
+
+.places article {
+  width: 390px;
+  padding: 20px;
+  margin: 20px;
+  border: 1px solid #ff545f;
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@media screen and (max-width: 400px) {
+  .places article {
+    width: 95%;
+  }
+}
+
+.places article .place_name {
+  text-align: center;
+}
+
+.places_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.price_by_night {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  height: 60px;
+  aspect-ratio: 1;
+  min-width: 60px;
+  color: #ff545f;
+  font-size: 30px;
+  border: 1px solid #ff545f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.information {
+  height: 80px;
+  border-block: 1px solid #dddddd;
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 8px;
+}
+
+.information div {
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.information .icon {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.max_guest .icon {
+  background: url("/images/icon_group.png") no-repeat 50%;
+}
+.number_rooms .icon {
+  background: url("/images/icon_bed.png") no-repeat 50%;
+}
+
+.number_bathrooms .icon {
+  background: url("/images/icon_bath.png") no-repeat 50%;
+}
+.user {
+  margin-block: 16px;
+}
+.user span {
+  font-weight: bold;
+}
+
+article .amenities .title,
+article .reviews .title {
+  font-size: 16px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 8px;
+}
+
+article .amenities ul,
+article .reviews ul {
+  list-style-type: none;
+}
+article .amenities ul li {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding-left: 55px;
+  line-height: 100%;
+  background-size: 40px;
+}
+
+article .amenities ul li.tv {
+  background: url("/images//icon_tv.png") no-repeat;
+}
+article .amenities ul li.wifi {
+  background: url("/images//icon_wifi.png") no-repeat;
+}
+article .amenities ul li.pets {
+  background: url("/images//icon_pets.png") no-repeat;
+}
+
+article .reviews .reviews_list li {
+  margin-bottom: 16px;
+}
+
+article .reviews .reviewer {
+  font-size: 14px;
+}
+article .reviews .review_content {
+  font-size: 12px;
+}

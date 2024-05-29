@@ -6,6 +6,7 @@ intepreter
 """
 import json
 import cmd
+import re
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
@@ -178,7 +179,8 @@ class HBNBCommand(cmd.Cmd):
             if args[2] in immutable_attrib:
                 return
             else:
-                setattr(obj, args[2], args[3])
+                obj.__setattr__(args[2], args[3])
+                obj.save()
 
     def emptyline(self):
         """
@@ -188,42 +190,37 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, line):
         """
-        Whay to do when the command entered is not among
-        the do commands
+        Patter matching method and arguments 
+        e.g all(), update('id', 'key', 'val'), update('id', {dict})
         """
-        args = line.split(".")
-        if args[0] not in HBNBCommand.my_classes:
+        pattern = r"(\w+)\(['\"]([-\w]+)['\"](?:,\s*['\"]([\s\w]+)['\"])?(?:,\s*['\"]([\s\w]+)['\"])?(?:,\s*({[.]*}))?\)"
+        cls_name, remaining = re.split(r"\.", line, maxsplit=1)
+        if cls_name not in HBNBCommand.my_classes:
             print("** invalid command **")
             return
-        if len(args) > 1:
-            if args[1] == "all()":
-                self.do_all(args[0])
-            elif args[1] == "count()":
-                self.do_count(args[0])
-            elif args[1].startswith("show(") and args[1].endswith(")"):
-                arg_id = args[1][6:-2]
-                self.do_show(args[0] + " " + arg_id)
-            elif args[1].startswith("destroy(") and args[1].endswith(")"):
-                arg_id = args[1][9:-2]
-                self.do_destroy(args[0] + " " + arg_id)
-            elif args[1].startswith("update(") and args[1].endswith(")"):
-                arg_details = args[1][7:-1]
-                arg_details = arg_details.split(", ")
-                if len(arg_details) == 3:
-                    _id = arg_details[0][1:-1]
-                    _name = arg_details[1][1:-1]
-                    _val = arg_details[2][1:-1]
-                    updt_args = "{} {} {} {}".format(args[0], _id, _name, _val)
-                    self.do_update(updt_args)
-                elif len(arg_details) == 2:
-                    if not isinstance(eval(arg_details[1]), dict):
-                        return
-                    else:
-                        dicto = eval(arg_details[1])
-                        for key, val in dicto.items():
-                            _id = arg_details[0][1:-1]
-                            _argz = f"{args[0]} {_id} {key} {val}"
-                            self.do_update(_argz)
+        no_args_functions = {"all()": self.do_all, "count()": self.do_count}
+        if remaining in no_args_functions:
+            no_args_functions[remaining](cls_name)
+        else:
+            remaining_distilled = re.search(pattern, remaining)
+            try:
+                remaining_distilled = list(remaining_distilled.groups())
+            except AttributeError:
+                print("** Invalid! **")
+            else:
+                valid_args = [item for item in remaining_distilled if item]
+                method_name = valid_args[0]
+                if method_name != "update":
+                    return
+                valid_args = valid_args[1:]
+                if len(valid_args) == 2:
+                    argz = eval(valid_args[1])
+                    for key, val in argz.items():
+                        _argz = f"{cls_name} {valid_args[0]} {key} {val}"
+                        self.do_update(_argz)
+                else:
+                    _argz = f"{cls_name} {valid_args[0]} {valid_args[1]} {valid_args[2]}"
+                    self.do_update(_argz)
 
     # Help methods for all the commands
 

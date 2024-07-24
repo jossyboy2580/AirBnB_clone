@@ -41,7 +41,7 @@
   font-weight: 600;
 }
 
-.sub-title {
+.subtitle {
   font-weight: 400;
   font-size: 14px;
 }
@@ -61,6 +61,7 @@
 .popover {
   display: none;
   position: absolute;
+  gap: 8px;
   left: 0;
   top: 100%;
   width: 100%;
@@ -71,7 +72,7 @@
 
 .locations:hover .popover,
 .amenities:hover .popover {
-  display: block;
+  display: grid;
 }
 
 .popover h2 {
@@ -80,4 +81,7 @@
 
 .popover ul {
   margin-left: 16px;
+  margin-block: 8px;
+  display: grid;
+  gap: 8px;
 }

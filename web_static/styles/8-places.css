@@ -22,10 +22,13 @@
   justify-content: center;
 }
 
+.article_header {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr max-content;
+}
+
 .price_by_night {
-  position: absolute;
-  top: 15px;
-  right: 15px;
   height: 60px;
   aspect-ratio: 1;
   min-width: 60px;

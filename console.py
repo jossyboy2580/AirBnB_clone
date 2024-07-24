@@ -23,9 +23,9 @@ class HBNBCommand(cmd.Cmd):
     """
     prompt = "(hbnb) "
     my_classes = {"BaseModel": BaseModel, "User": User,
-                  "City": City, "Place": Place,
-                  "State": State, "Amenity": Amenity,
-                  "Review": Review}
+            "City": City, "Place": Place,
+            "State": State, "Amenity": Amenity,
+            "Review": Review}
 
     def do_quit(self, line):
         """
@@ -113,6 +113,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Show command to display all objects
         """
+        storage.reload()
         all_objs = storage.all()
         cls_dict = HBNBCommand.my_classes
         if not line:
@@ -156,7 +157,8 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             print("** class name missing **")
             return
-        args = line.split()
+        print(line)
+        args = line.split(maxsplit=3)
         if args[0] not in cls_dict:
             print("** class doesn't exist **")
             return
@@ -181,6 +183,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 obj.__setattr__(args[2], args[3])
                 obj.save()
+        storage.reload()
 
     def emptyline(self):
         """
@@ -190,37 +193,29 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, line):
         """
-        Patter matching method and arguments 
-        e.g all(), update('id', 'key', 'val'), update('id', {dict})
+        Handle inputs of type
+        User <id> {attributes list}
         """
-        pattern = r"(\w+)\(['\"]([-\w]+)['\"](?:,\s*['\"]([\s\w]+)['\"])?(?:,\s*['\"]([\s\w]+)['\"])?(?:,\s*({[.]*}))?\)"
-        cls_name, remaining = re.split(r"\.", line, maxsplit=1)
-        if cls_name not in HBNBCommand.my_classes:
-            print("** invalid command **")
+        if len(line.split()) < 2:
             return
-        no_args_functions = {"all()": self.do_all, "count()": self.do_count}
-        if remaining in no_args_functions:
-            no_args_functions[remaining](cls_name)
+        cls_name, remaining = line.split(maxsplit=1)
+        if cls_name not in HBNBCommand.my_classes:
+            print('** invalid command **')
+            return
+        if '{' in remaining:
+            cls_id, attrs = remaining.split(maxsplit=1)
+            attrs = eval(attrs)
+            for key, val in attrs.items():
+                argz = f'{cls_name} {cls_id} {key} {val}'
+                self.do_update(argz)
         else:
-            remaining_distilled = re.search(pattern, remaining)
             try:
-                remaining_distilled = list(remaining_distilled.groups())
-            except AttributeError:
-                print("** Invalid! **")
+                cls_id, attr, val = remaining.split()
+            except Exception as exc:
+                return
             else:
-                valid_args = [item for item in remaining_distilled if item]
-                method_name = valid_args[0]
-                if method_name != "update":
-                    return
-                valid_args = valid_args[1:]
-                if len(valid_args) == 2:
-                    argz = eval(valid_args[1])
-                    for key, val in argz.items():
-                        _argz = f"{cls_name} {valid_args[0]} {key} {val}"
-                        self.do_update(_argz)
-                else:
-                    _argz = f"{cls_name} {valid_args[0]} {valid_args[1]} {valid_args[2]}"
-                    self.do_update(_argz)
+                argz = f'{cls_name} {cls_id} {attr} {val}'
+                self.do_update(argz)
 
     # Help methods for all the commands
 

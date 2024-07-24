@@ -53,3 +53,5 @@ class FileStorage:
                     self.__objects[key] = instance
         except FileNotFoundError:
             return
+
+storage = FileStorage()

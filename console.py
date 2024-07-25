@@ -182,7 +182,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 obj.__setattr__(args[2], args[3])
                 obj.save()
-        storage.reload()
+        # storage.reload()
 
     def emptyline(self):
         """

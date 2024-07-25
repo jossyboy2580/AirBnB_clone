@@ -157,7 +157,6 @@ class HBNBCommand(cmd.Cmd):
         if not line:
             print("** class name missing **")
             return
-        print(line)
         args = line.split(maxsplit=3)
         if args[0] not in cls_dict:
             print("** class doesn't exist **")
@@ -196,25 +195,38 @@ class HBNBCommand(cmd.Cmd):
         Handle inputs of type
         User <id> {attributes list}
         """
-        if len(line.split()) < 2:
-            return
-        cls_name, remaining = line.split(maxsplit=1)
+        valid_commands = {"show": self.do_show, 'update': self.do_update,
+                          'destroy': self.do_destroy, 'count': self.do_count,
+                          'all': self.do_all}
+        #  Extract the class name
+        cls_name, remaining = line.split('.', maxsplit=1)
         if cls_name not in HBNBCommand.my_classes:
-            print('** invalid command **')
+            print("** class doesn't exist **")
             return
+        command, remaining = remaining.split('(', maxsplit=1)
+        if not command in valid_commands:
+            print("** invalid command **")
+            return
+        if command in ('count', 'all'):
+            valid_commands[command](cls_name)
+            return
+        remaining = remaining[:-1]
+        if command in ('show', 'destroy'):
+            valid_commands[command](f'{cls_name} {eval(remaining)}')
+            return
+        cls_id, remaining = remaining.split(', ', maxsplit=1)
         if '{' in remaining:
-            cls_id, attrs = remaining.split(maxsplit=1)
-            attrs = eval(attrs)
+            attrs = eval(remaining)
             for key, val in attrs.items():
-                argz = f'{cls_name} {cls_id} {key} {val}'
+                argz = f'{cls_name} {eval(cls_id)} {key} {val}'
                 self.do_update(argz)
         else:
             try:
-                cls_id, attr, val = remaining.split()
+                attr, val = remaining.split(', ')
             except Exception as exc:
                 return
             else:
-                argz = f'{cls_name} {cls_id} {attr} {val}'
+                argz = f'{cls_name} {eval(cls_id)} {attr} {val}'
                 self.do_update(argz)
 
     # Help methods for all the commands
